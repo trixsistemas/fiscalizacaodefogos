@@ -154,7 +154,7 @@ export type Database = {
           orgao_id: string | null
           status: Database["public"]["Enums"]["report_status"]
           tipo_ocorrencia: Database["public"]["Enums"]["occurrence_type"]
-          usuario_id: string
+          usuario_id: string | null
         }
         Insert: {
           atualizado_em?: string
@@ -168,7 +168,7 @@ export type Database = {
           orgao_id?: string | null
           status?: Database["public"]["Enums"]["report_status"]
           tipo_ocorrencia?: Database["public"]["Enums"]["occurrence_type"]
-          usuario_id: string
+          usuario_id?: string | null
         }
         Update: {
           atualizado_em?: string
@@ -182,7 +182,7 @@ export type Database = {
           orgao_id?: string | null
           status?: Database["public"]["Enums"]["report_status"]
           tipo_ocorrencia?: Database["public"]["Enums"]["occurrence_type"]
-          usuario_id?: string
+          usuario_id?: string | null
         }
         Relationships: [
           {
@@ -217,6 +217,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_anonymous_report: {
+        Args: {
+          _bairro?: string
+          _descricao?: string
+          _endereco?: string
+          _latitude: number
+          _longitude: number
+          _tipo: Database["public"]["Enums"]["occurrence_type"]
+        }
+        Returns: string
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
