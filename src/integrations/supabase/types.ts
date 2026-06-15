@@ -14,16 +14,228 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      evidence: {
+        Row: {
+          ai_classe: string | null
+          ai_confianca: number | null
+          arquivo_url: string
+          criado_em: string
+          id: string
+          report_id: string
+          tipo: Database["public"]["Enums"]["evidence_type"]
+        }
+        Insert: {
+          ai_classe?: string | null
+          ai_confianca?: number | null
+          arquivo_url: string
+          criado_em?: string
+          id?: string
+          report_id: string
+          tipo: Database["public"]["Enums"]["evidence_type"]
+        }
+        Update: {
+          ai_classe?: string | null
+          ai_confianca?: number | null
+          arquivo_url?: string
+          criado_em?: string
+          id?: string
+          report_id?: string
+          tipo?: Database["public"]["Enums"]["evidence_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "evidence_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inspections: {
+        Row: {
+          data_fiscalizacao: string
+          fiscal_id: string
+          id: string
+          observacao: string | null
+          report_id: string
+          resultado: Database["public"]["Enums"]["inspection_result"]
+        }
+        Insert: {
+          data_fiscalizacao?: string
+          fiscal_id: string
+          id?: string
+          observacao?: string | null
+          report_id: string
+          resultado: Database["public"]["Enums"]["inspection_result"]
+        }
+        Update: {
+          data_fiscalizacao?: string
+          fiscal_id?: string
+          id?: string
+          observacao?: string | null
+          report_id?: string
+          resultado?: Database["public"]["Enums"]["inspection_result"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inspections_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orgaos: {
+        Row: {
+          ativo: boolean
+          cidade: string
+          contato: string | null
+          criado_em: string
+          estado: string
+          id: string
+          nome: string
+        }
+        Insert: {
+          ativo?: boolean
+          cidade: string
+          contato?: string | null
+          criado_em?: string
+          estado: string
+          id?: string
+          nome: string
+        }
+        Update: {
+          ativo?: boolean
+          cidade?: string
+          contato?: string | null
+          criado_em?: string
+          estado?: string
+          id?: string
+          nome?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          criado_em: string
+          email: string
+          id: string
+          nome: string
+          telefone: string | null
+        }
+        Insert: {
+          criado_em?: string
+          email: string
+          id: string
+          nome: string
+          telefone?: string | null
+        }
+        Update: {
+          criado_em?: string
+          email?: string
+          id?: string
+          nome?: string
+          telefone?: string | null
+        }
+        Relationships: []
+      }
+      reports: {
+        Row: {
+          atualizado_em: string
+          bairro: string | null
+          criado_em: string
+          descricao: string | null
+          endereco: string | null
+          id: string
+          latitude: number
+          longitude: number
+          orgao_id: string | null
+          status: Database["public"]["Enums"]["report_status"]
+          tipo_ocorrencia: Database["public"]["Enums"]["occurrence_type"]
+          usuario_id: string
+        }
+        Insert: {
+          atualizado_em?: string
+          bairro?: string | null
+          criado_em?: string
+          descricao?: string | null
+          endereco?: string | null
+          id?: string
+          latitude: number
+          longitude: number
+          orgao_id?: string | null
+          status?: Database["public"]["Enums"]["report_status"]
+          tipo_ocorrencia?: Database["public"]["Enums"]["occurrence_type"]
+          usuario_id: string
+        }
+        Update: {
+          atualizado_em?: string
+          bairro?: string | null
+          criado_em?: string
+          descricao?: string | null
+          endereco?: string | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          orgao_id?: string | null
+          status?: Database["public"]["Enums"]["report_status"]
+          tipo_ocorrencia?: Database["public"]["Enums"]["occurrence_type"]
+          usuario_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reports_orgao_id_fkey"
+            columns: ["orgao_id"]
+            isOneToOne: false
+            referencedRelation: "orgaos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "cidadao" | "fiscal" | "admin"
+      evidence_type: "foto" | "video" | "audio"
+      inspection_result: "confirmado" | "nao_confirmado" | "inconclusivo"
+      occurrence_type:
+        | "fogo_com_estampido"
+        | "fogo_silencioso"
+        | "rojao"
+        | "bateria_fogos"
+        | "outro"
+      report_status: "em_analise" | "confirmada" | "arquivada" | "falsa"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +362,18 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["cidadao", "fiscal", "admin"],
+      evidence_type: ["foto", "video", "audio"],
+      inspection_result: ["confirmado", "nao_confirmado", "inconclusivo"],
+      occurrence_type: [
+        "fogo_com_estampido",
+        "fogo_silencioso",
+        "rojao",
+        "bateria_fogos",
+        "outro",
+      ],
+      report_status: ["em_analise", "confirmada", "arquivada", "falsa"],
+    },
   },
 } as const
