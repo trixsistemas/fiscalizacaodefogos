@@ -150,6 +150,12 @@ function HomePage() {
                   Registrar denúncia
                 </Button>
               </Link>
+              <Link
+                to="/denuncia-anonima"
+                className="block text-center text-xs text-muted-foreground hover:text-foreground underline"
+              >
+                ou denunciar anonimamente, sem criar conta
+              </Link>
             </div>
 
             <div className="bg-ink text-brand-foreground p-6 rounded-2xl space-y-3">
