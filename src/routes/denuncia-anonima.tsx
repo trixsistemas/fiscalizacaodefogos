@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -50,6 +50,7 @@ function DenunciaAnonima() {
   const [endereco, setEndereco] = useState("");
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [locating, setLocating] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
 
   const useMyLocation = () => {
     if (!navigator.geolocation) {
@@ -91,7 +92,21 @@ function DenunciaAnonima() {
         _endereco: parsed.endereco || undefined,
       });
       if (error) throw error;
-      return data as string;
+      const reportId = data as string;
+
+      if (files.length > 0) {
+        const fd = new FormData();
+        fd.append("report_id", reportId);
+        for (const f of files.slice(0, 5)) fd.append("files", f);
+        const res = await fetch("/api/public/anonymous-evidence", {
+          method: "POST",
+          body: fd,
+        });
+        if (!res.ok) {
+          toast.warning("Denúncia criada, mas falha ao enviar evidências");
+        }
+      }
+      return reportId;
     },
     onSuccess: () => {
       toast.success("Denúncia anônima registrada");
@@ -115,12 +130,8 @@ function DenunciaAnonima() {
           <div className="flex items-start gap-2 p-4 rounded-xl bg-card ring-1 ring-border text-sm text-muted-foreground">
             <ShieldCheck className="size-4 text-brand shrink-0 mt-0.5" />
             <p>
-              Não coletamos seu nome, e-mail nem IP. Para anexar fotos, vídeos
-              ou áudios,{" "}
-              <Link to="/nova-denuncia" className="text-foreground underline">
-                registre uma denúncia identificada
-              </Link>
-              .
+              Não coletamos seu nome, e-mail nem IP. Fotos, vídeos e áudios
+              enviados ficam visíveis apenas para fiscais responsáveis.
             </p>
           </div>
         </header>
@@ -212,6 +223,22 @@ function DenunciaAnonima() {
               onChange={(e) => setDescricao(e.target.value)}
               placeholder="Conte o que aconteceu — horário, frequência, etc."
             />
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="evidence">Evidências (foto, vídeo ou áudio)</Label>
+            <Input
+              id="evidence"
+              type="file"
+              multiple
+              accept="image/*,video/*,audio/*"
+              onChange={(e) => setFiles(Array.from(e.target.files ?? []).slice(0, 5))}
+            />
+            <p className="text-xs text-muted-foreground">
+              {files.length > 0
+                ? `${files.length} arquivo(s) selecionado(s) — máx. 5, 25MB cada`
+                : "Opcional. Até 5 arquivos, 25MB cada."}
+            </p>
           </div>
 
           <div className="flex gap-3 pt-2">

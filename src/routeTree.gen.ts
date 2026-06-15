@@ -17,6 +17,7 @@ import { Route as DenunciaIdRouteImport } from './routes/denuncia.$id'
 import { Route as AuthenticatedPainelFiscalRouteImport } from './routes/_authenticated/painel-fiscal'
 import { Route as AuthenticatedNovaDenunciaRouteImport } from './routes/_authenticated/nova-denuncia'
 import { Route as AuthenticatedMinhasDenunciasRouteImport } from './routes/_authenticated/minhas-denuncias'
+import { Route as ApiPublicAnonymousEvidenceRouteImport } from './routes/api/public/anonymous-evidence'
 
 const DenunciaAnonimaRoute = DenunciaAnonimaRouteImport.update({
   id: '/denuncia-anonima',
@@ -60,6 +61,12 @@ const AuthenticatedMinhasDenunciasRoute =
     path: '/minhas-denuncias',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const ApiPublicAnonymousEvidenceRoute =
+  ApiPublicAnonymousEvidenceRouteImport.update({
+    id: '/api/public/anonymous-evidence',
+    path: '/api/public/anonymous-evidence',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -69,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
   '/painel-fiscal': typeof AuthenticatedPainelFiscalRoute
   '/denuncia/$id': typeof DenunciaIdRoute
+  '/api/public/anonymous-evidence': typeof ApiPublicAnonymousEvidenceRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +86,7 @@ export interface FileRoutesByTo {
   '/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
   '/painel-fiscal': typeof AuthenticatedPainelFiscalRoute
   '/denuncia/$id': typeof DenunciaIdRoute
+  '/api/public/anonymous-evidence': typeof ApiPublicAnonymousEvidenceRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +98,7 @@ export interface FileRoutesById {
   '/_authenticated/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
   '/_authenticated/painel-fiscal': typeof AuthenticatedPainelFiscalRoute
   '/denuncia/$id': typeof DenunciaIdRoute
+  '/api/public/anonymous-evidence': typeof ApiPublicAnonymousEvidenceRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/nova-denuncia'
     | '/painel-fiscal'
     | '/denuncia/$id'
+    | '/api/public/anonymous-evidence'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/nova-denuncia'
     | '/painel-fiscal'
     | '/denuncia/$id'
+    | '/api/public/anonymous-evidence'
   id:
     | '__root__'
     | '/'
@@ -119,6 +131,7 @@ export interface FileRouteTypes {
     | '/_authenticated/nova-denuncia'
     | '/_authenticated/painel-fiscal'
     | '/denuncia/$id'
+    | '/api/public/anonymous-evidence'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -127,6 +140,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   DenunciaAnonimaRoute: typeof DenunciaAnonimaRoute
   DenunciaIdRoute: typeof DenunciaIdRoute
+  ApiPublicAnonymousEvidenceRoute: typeof ApiPublicAnonymousEvidenceRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -187,6 +201,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMinhasDenunciasRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/api/public/anonymous-evidence': {
+      id: '/api/public/anonymous-evidence'
+      path: '/api/public/anonymous-evidence'
+      fullPath: '/api/public/anonymous-evidence'
+      preLoaderRoute: typeof ApiPublicAnonymousEvidenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -212,6 +233,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   DenunciaAnonimaRoute: DenunciaAnonimaRoute,
   DenunciaIdRoute: DenunciaIdRoute,
+  ApiPublicAnonymousEvidenceRoute: ApiPublicAnonymousEvidenceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
