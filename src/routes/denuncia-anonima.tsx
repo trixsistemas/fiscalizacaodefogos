@@ -130,12 +130,8 @@ function DenunciaAnonima() {
           <div className="flex items-start gap-2 p-4 rounded-xl bg-card ring-1 ring-border text-sm text-muted-foreground">
             <ShieldCheck className="size-4 text-brand shrink-0 mt-0.5" />
             <p>
-              Não coletamos seu nome, e-mail nem IP. Para anexar fotos, vídeos
-              ou áudios,{" "}
-              <Link to="/nova-denuncia" className="text-foreground underline">
-                registre uma denúncia identificada
-              </Link>
-              .
+              Não coletamos seu nome, e-mail nem IP. Fotos, vídeos e áudios
+              enviados ficam visíveis apenas para fiscais responsáveis.
             </p>
           </div>
         </header>
