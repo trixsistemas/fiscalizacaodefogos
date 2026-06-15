@@ -142,7 +142,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 {n.label}
               </Link>
             ))}
-            {auth.user && (
+            {auth.user && !isFiscal && (
               <Link to="/nova-denuncia" onClick={() => setOpen(false)}>
                 <Button size="sm" className="gap-1.5 w-full">
                   <Plus className="size-4" />
