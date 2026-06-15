@@ -224,6 +224,18 @@ export type Database = {
         }
         Returns: boolean
       }
+      list_public_reports: {
+        Args: { _limit?: number }
+        Returns: {
+          bairro: string
+          criado_em: string
+          id: string
+          latitude: number
+          longitude: number
+          status: Database["public"]["Enums"]["report_status"]
+          tipo_ocorrencia: Database["public"]["Enums"]["occurrence_type"]
+        }[]
+      }
     }
     Enums: {
       app_role: "cidadao" | "fiscal" | "admin"

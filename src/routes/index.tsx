@@ -26,11 +26,9 @@ function HomePage() {
   const { data, isLoading } = useQuery({
     queryKey: ["reports", "recent"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("reports")
-        .select("id, tipo_ocorrencia, status, bairro, criado_em, latitude, longitude")
-        .order("criado_em", { ascending: false })
-        .limit(50);
+      const { data, error } = await supabase.rpc("list_public_reports", {
+        _limit: 50,
+      });
       if (error) throw error;
       return data ?? [];
     },
