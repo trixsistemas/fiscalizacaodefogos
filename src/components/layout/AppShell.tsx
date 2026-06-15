@@ -94,12 +94,14 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="flex items-center gap-2">
             {auth.user ? (
               <>
-                <Link to="/nova-denuncia" className="hidden sm:inline-flex">
-                  <Button size="sm" className="gap-1.5">
-                    <Plus className="size-4" />
-                    Nova denúncia
-                  </Button>
-                </Link>
+                {!isFiscal && (
+                  <Link to="/nova-denuncia" className="hidden sm:inline-flex">
+                    <Button size="sm" className="gap-1.5">
+                      <Plus className="size-4" />
+                      Nova denúncia
+                    </Button>
+                  </Link>
+                )}
                 <Button
                   variant="ghost"
                   size="icon"
