@@ -9,38 +9,129 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DenunciaIdRouteImport } from './routes/denuncia.$id'
+import { Route as AuthenticatedPainelFiscalRouteImport } from './routes/_authenticated/painel-fiscal'
+import { Route as AuthenticatedNovaDenunciaRouteImport } from './routes/_authenticated/nova-denuncia'
+import { Route as AuthenticatedMinhasDenunciasRouteImport } from './routes/_authenticated/minhas-denuncias'
 
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DenunciaIdRoute = DenunciaIdRouteImport.update({
+  id: '/denuncia/$id',
+  path: '/denuncia/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedPainelFiscalRoute =
+  AuthenticatedPainelFiscalRouteImport.update({
+    id: '/painel-fiscal',
+    path: '/painel-fiscal',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedNovaDenunciaRoute =
+  AuthenticatedNovaDenunciaRouteImport.update({
+    id: '/nova-denuncia',
+    path: '/nova-denuncia',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedMinhasDenunciasRoute =
+  AuthenticatedMinhasDenunciasRouteImport.update({
+    id: '/minhas-denuncias',
+    path: '/minhas-denuncias',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/minhas-denuncias': typeof AuthenticatedMinhasDenunciasRoute
+  '/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
+  '/painel-fiscal': typeof AuthenticatedPainelFiscalRoute
+  '/denuncia/$id': typeof DenunciaIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/minhas-denuncias': typeof AuthenticatedMinhasDenunciasRoute
+  '/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
+  '/painel-fiscal': typeof AuthenticatedPainelFiscalRoute
+  '/denuncia/$id': typeof DenunciaIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/_authenticated/minhas-denuncias': typeof AuthenticatedMinhasDenunciasRoute
+  '/_authenticated/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
+  '/_authenticated/painel-fiscal': typeof AuthenticatedPainelFiscalRoute
+  '/denuncia/$id': typeof DenunciaIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/minhas-denuncias'
+    | '/nova-denuncia'
+    | '/painel-fiscal'
+    | '/denuncia/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/auth'
+    | '/minhas-denuncias'
+    | '/nova-denuncia'
+    | '/painel-fiscal'
+    | '/denuncia/$id'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/_authenticated/minhas-denuncias'
+    | '/_authenticated/nova-denuncia'
+    | '/_authenticated/painel-fiscal'
+    | '/denuncia/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  DenunciaIdRoute: typeof DenunciaIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +139,57 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/denuncia/$id': {
+      id: '/denuncia/$id'
+      path: '/denuncia/$id'
+      fullPath: '/denuncia/$id'
+      preLoaderRoute: typeof DenunciaIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/painel-fiscal': {
+      id: '/_authenticated/painel-fiscal'
+      path: '/painel-fiscal'
+      fullPath: '/painel-fiscal'
+      preLoaderRoute: typeof AuthenticatedPainelFiscalRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/nova-denuncia': {
+      id: '/_authenticated/nova-denuncia'
+      path: '/nova-denuncia'
+      fullPath: '/nova-denuncia'
+      preLoaderRoute: typeof AuthenticatedNovaDenunciaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/minhas-denuncias': {
+      id: '/_authenticated/minhas-denuncias'
+      path: '/minhas-denuncias'
+      fullPath: '/minhas-denuncias'
+      preLoaderRoute: typeof AuthenticatedMinhasDenunciasRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedMinhasDenunciasRoute: typeof AuthenticatedMinhasDenunciasRoute
+  AuthenticatedNovaDenunciaRoute: typeof AuthenticatedNovaDenunciaRoute
+  AuthenticatedPainelFiscalRoute: typeof AuthenticatedPainelFiscalRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedMinhasDenunciasRoute: AuthenticatedMinhasDenunciasRoute,
+  AuthenticatedNovaDenunciaRoute: AuthenticatedNovaDenunciaRoute,
+  AuthenticatedPainelFiscalRoute: AuthenticatedPainelFiscalRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  DenunciaIdRoute: DenunciaIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
