@@ -25,6 +25,16 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
+  const auth = useAuth();
+  const navigate = useNavigate();
+  const isFiscal = hasRole(auth.roles, "fiscal") || hasRole(auth.roles, "admin");
+
+  useEffect(() => {
+    if (!auth.loading && isFiscal) {
+      navigate({ to: "/guarda-moreno", replace: true });
+    }
+  }, [auth.loading, isFiscal, navigate]);
+
   const { data, isLoading } = useQuery({
     queryKey: ["reports", "recent"],
     queryFn: async () => {
