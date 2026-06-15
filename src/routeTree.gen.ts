@@ -19,6 +19,7 @@ import { Route as AuthenticatedNovaDenunciaRouteImport } from './routes/_authent
 import { Route as AuthenticatedMinhasDenunciasRouteImport } from './routes/_authenticated/minhas-denuncias'
 import { Route as AuthenticatedGuardaMorenoRouteImport } from './routes/_authenticated/guarda-moreno'
 import { Route as ApiPublicAnonymousEvidenceRouteImport } from './routes/api/public/anonymous-evidence'
+import { Route as AuthenticatedAdminUsuariosRouteImport } from './routes/_authenticated/admin.usuarios'
 
 const DenunciaAnonimaRoute = DenunciaAnonimaRouteImport.update({
   id: '/denuncia-anonima',
@@ -74,6 +75,12 @@ const ApiPublicAnonymousEvidenceRoute =
     path: '/api/public/anonymous-evidence',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AuthenticatedAdminUsuariosRoute =
+  AuthenticatedAdminUsuariosRouteImport.update({
+    id: '/admin/usuarios',
+    path: '/admin/usuarios',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -84,6 +91,7 @@ export interface FileRoutesByFullPath {
   '/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
   '/painel-fiscal': typeof AuthenticatedPainelFiscalRoute
   '/denuncia/$id': typeof DenunciaIdRoute
+  '/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
   '/api/public/anonymous-evidence': typeof ApiPublicAnonymousEvidenceRoute
 }
 export interface FileRoutesByTo {
@@ -95,6 +103,7 @@ export interface FileRoutesByTo {
   '/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
   '/painel-fiscal': typeof AuthenticatedPainelFiscalRoute
   '/denuncia/$id': typeof DenunciaIdRoute
+  '/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
   '/api/public/anonymous-evidence': typeof ApiPublicAnonymousEvidenceRoute
 }
 export interface FileRoutesById {
@@ -108,6 +117,7 @@ export interface FileRoutesById {
   '/_authenticated/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
   '/_authenticated/painel-fiscal': typeof AuthenticatedPainelFiscalRoute
   '/denuncia/$id': typeof DenunciaIdRoute
+  '/_authenticated/admin/usuarios': typeof AuthenticatedAdminUsuariosRoute
   '/api/public/anonymous-evidence': typeof ApiPublicAnonymousEvidenceRoute
 }
 export interface FileRouteTypes {
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
     | '/nova-denuncia'
     | '/painel-fiscal'
     | '/denuncia/$id'
+    | '/admin/usuarios'
     | '/api/public/anonymous-evidence'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/nova-denuncia'
     | '/painel-fiscal'
     | '/denuncia/$id'
+    | '/admin/usuarios'
     | '/api/public/anonymous-evidence'
   id:
     | '__root__'
@@ -144,6 +156,7 @@ export interface FileRouteTypes {
     | '/_authenticated/nova-denuncia'
     | '/_authenticated/painel-fiscal'
     | '/denuncia/$id'
+    | '/_authenticated/admin/usuarios'
     | '/api/public/anonymous-evidence'
   fileRoutesById: FileRoutesById
 }
@@ -228,6 +241,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicAnonymousEvidenceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/usuarios': {
+      id: '/_authenticated/admin/usuarios'
+      path: '/admin/usuarios'
+      fullPath: '/admin/usuarios'
+      preLoaderRoute: typeof AuthenticatedAdminUsuariosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -236,6 +256,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedMinhasDenunciasRoute: typeof AuthenticatedMinhasDenunciasRoute
   AuthenticatedNovaDenunciaRoute: typeof AuthenticatedNovaDenunciaRoute
   AuthenticatedPainelFiscalRoute: typeof AuthenticatedPainelFiscalRoute
+  AuthenticatedAdminUsuariosRoute: typeof AuthenticatedAdminUsuariosRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -243,6 +264,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedMinhasDenunciasRoute: AuthenticatedMinhasDenunciasRoute,
   AuthenticatedNovaDenunciaRoute: AuthenticatedNovaDenunciaRoute,
   AuthenticatedPainelFiscalRoute: AuthenticatedPainelFiscalRoute,
+  AuthenticatedAdminUsuariosRoute: AuthenticatedAdminUsuariosRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
