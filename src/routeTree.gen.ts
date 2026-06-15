@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DenunciaIdRouteImport } from './routes/denuncia.$id'
 import { Route as AuthenticatedPainelFiscalRouteImport } from './routes/_authenticated/painel-fiscal'
@@ -22,7 +22,7 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
@@ -40,19 +40,19 @@ const AuthenticatedPainelFiscalRoute =
   AuthenticatedPainelFiscalRouteImport.update({
     id: '/painel-fiscal',
     path: '/painel-fiscal',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedNovaDenunciaRoute =
   AuthenticatedNovaDenunciaRouteImport.update({
     id: '/nova-denuncia',
     path: '/nova-denuncia',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedMinhasDenunciasRoute =
   AuthenticatedMinhasDenunciasRouteImport.update({
     id: '/minhas-denuncias',
     path: '/minhas-denuncias',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
@@ -74,7 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
   '/_authenticated/minhas-denuncias': typeof AuthenticatedMinhasDenunciasRoute
   '/_authenticated/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
@@ -111,7 +111,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
   DenunciaIdRoute: typeof DenunciaIdRoute
 }
@@ -129,7 +129,7 @@ declare module '@tanstack/react-router' {
       id: '/_authenticated'
       path: ''
       fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -151,43 +151,44 @@ declare module '@tanstack/react-router' {
       path: '/painel-fiscal'
       fullPath: '/painel-fiscal'
       preLoaderRoute: typeof AuthenticatedPainelFiscalRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/nova-denuncia': {
       id: '/_authenticated/nova-denuncia'
       path: '/nova-denuncia'
       fullPath: '/nova-denuncia'
       preLoaderRoute: typeof AuthenticatedNovaDenunciaRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/minhas-denuncias': {
       id: '/_authenticated/minhas-denuncias'
       path: '/minhas-denuncias'
       fullPath: '/minhas-denuncias'
       preLoaderRoute: typeof AuthenticatedMinhasDenunciasRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
-interface AuthenticatedRouteRouteChildren {
+interface AuthenticatedRouteChildren {
   AuthenticatedMinhasDenunciasRoute: typeof AuthenticatedMinhasDenunciasRoute
   AuthenticatedNovaDenunciaRoute: typeof AuthenticatedNovaDenunciaRoute
   AuthenticatedPainelFiscalRoute: typeof AuthenticatedPainelFiscalRoute
 }
 
-const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedMinhasDenunciasRoute: AuthenticatedMinhasDenunciasRoute,
   AuthenticatedNovaDenunciaRoute: AuthenticatedNovaDenunciaRoute,
   AuthenticatedPainelFiscalRoute: AuthenticatedPainelFiscalRoute,
 }
 
-const AuthenticatedRouteRouteWithChildren =
-  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
   DenunciaIdRoute: DenunciaIdRoute,
 }
