@@ -239,7 +239,6 @@ function DenunciaAnonima() {
                 ? `${files.length} arquivo(s) selecionado(s) — máx. 5, 25MB cada`
                 : "Opcional. Até 5 arquivos, 25MB cada."}
             </p>
-            />
           </div>
 
           <div className="flex gap-3 pt-2">
