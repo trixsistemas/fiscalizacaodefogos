@@ -50,6 +50,7 @@ function DenunciaAnonima() {
   const [endereco, setEndereco] = useState("");
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [locating, setLocating] = useState(false);
+  const [files, setFiles] = useState<File[]>([]);
 
   const useMyLocation = () => {
     if (!navigator.geolocation) {
