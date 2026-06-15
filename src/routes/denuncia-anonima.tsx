@@ -92,7 +92,21 @@ function DenunciaAnonima() {
         _endereco: parsed.endereco || undefined,
       });
       if (error) throw error;
-      return data as string;
+      const reportId = data as string;
+
+      if (files.length > 0) {
+        const fd = new FormData();
+        fd.append("report_id", reportId);
+        for (const f of files.slice(0, 5)) fd.append("files", f);
+        const res = await fetch("/api/public/anonymous-evidence", {
+          method: "POST",
+          body: fd,
+        });
+        if (!res.ok) {
+          toast.warning("Denúncia criada, mas falha ao enviar evidências");
+        }
+      }
+      return reportId;
     },
     onSuccess: () => {
       toast.success("Denúncia anônima registrada");
