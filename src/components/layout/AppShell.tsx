@@ -9,15 +9,20 @@ import { cn } from "@/lib/utils";
 interface NavItem {
   to: string;
   label: string;
-  requireRole?: "fiscal" | "admin";
 }
 
-const NAV: NavItem[] = [
+const CITIZEN_NAV: NavItem[] = [
   { to: "/", label: "Mapa" },
   { to: "/minhas-denuncias", label: "Minhas denúncias" },
-  { to: "/painel-fiscal", label: "Painel fiscal", requireRole: "fiscal" },
-  { to: "/guarda-moreno", label: "Guarda Municipal", requireRole: "fiscal" },
-  { to: "/admin/usuarios", label: "Usuários", requireRole: "admin" },
+];
+
+const FISCAL_NAV: NavItem[] = [
+  { to: "/guarda-moreno", label: "Caixa de denúncias" },
+  { to: "/painel-fiscal", label: "Triagem geral" },
+];
+
+const ADMIN_NAV: NavItem[] = [
+  { to: "/admin/usuarios", label: "Usuários" },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -26,10 +31,13 @@ export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [open, setOpen] = useState(false);
 
-  const visibleNav = NAV.filter((n) => {
-    if (!n.requireRole) return true;
-    return hasRole(auth.roles, n.requireRole) || hasRole(auth.roles, "admin");
-  });
+  const isFiscal = hasRole(auth.roles, "fiscal") || hasRole(auth.roles, "admin");
+  const isAdmin = hasRole(auth.roles, "admin");
+
+  // Fiscais/admins veem APENAS o painel de recebimento. Cidadãos veem o app público.
+  const visibleNav: NavItem[] = isFiscal
+    ? [...FISCAL_NAV, ...(isAdmin ? ADMIN_NAV : [])]
+    : CITIZEN_NAV;
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -86,12 +94,14 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="flex items-center gap-2">
             {auth.user ? (
               <>
-                <Link to="/nova-denuncia" className="hidden sm:inline-flex">
-                  <Button size="sm" className="gap-1.5">
-                    <Plus className="size-4" />
-                    Nova denúncia
-                  </Button>
-                </Link>
+                {!isFiscal && (
+                  <Link to="/nova-denuncia" className="hidden sm:inline-flex">
+                    <Button size="sm" className="gap-1.5">
+                      <Plus className="size-4" />
+                      Nova denúncia
+                    </Button>
+                  </Link>
+                )}
                 <Button
                   variant="ghost"
                   size="icon"
@@ -132,7 +142,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 {n.label}
               </Link>
             ))}
-            {auth.user && (
+            {auth.user && !isFiscal && (
               <Link to="/nova-denuncia" onClick={() => setOpen(false)}>
                 <Button size="sm" className="gap-1.5 w-full">
                   <Plus className="size-4" />
