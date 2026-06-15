@@ -225,6 +225,23 @@ function DenunciaAnonima() {
             />
           </div>
 
+          <div className="space-y-1.5">
+            <Label htmlFor="evidence">Evidências (foto, vídeo ou áudio)</Label>
+            <Input
+              id="evidence"
+              type="file"
+              multiple
+              accept="image/*,video/*,audio/*"
+              onChange={(e) => setFiles(Array.from(e.target.files ?? []).slice(0, 5))}
+            />
+            <p className="text-xs text-muted-foreground">
+              {files.length > 0
+                ? `${files.length} arquivo(s) selecionado(s) — máx. 5, 25MB cada`
+                : "Opcional. Até 5 arquivos, 25MB cada."}
+            </p>
+            />
+          </div>
+
           <div className="flex gap-3 pt-2">
             <Button
               type="button"
