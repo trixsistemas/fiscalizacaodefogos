@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as DenunciaAnonimaRouteImport } from './routes/denuncia-anonima'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
@@ -17,6 +18,11 @@ import { Route as AuthenticatedPainelFiscalRouteImport } from './routes/_authent
 import { Route as AuthenticatedNovaDenunciaRouteImport } from './routes/_authenticated/nova-denuncia'
 import { Route as AuthenticatedMinhasDenunciasRouteImport } from './routes/_authenticated/minhas-denuncias'
 
+const DenunciaAnonimaRoute = DenunciaAnonimaRouteImport.update({
+  id: '/denuncia-anonima',
+  path: '/denuncia-anonima',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -58,6 +64,7 @@ const AuthenticatedMinhasDenunciasRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/denuncia-anonima': typeof DenunciaAnonimaRoute
   '/minhas-denuncias': typeof AuthenticatedMinhasDenunciasRoute
   '/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
   '/painel-fiscal': typeof AuthenticatedPainelFiscalRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/denuncia-anonima': typeof DenunciaAnonimaRoute
   '/minhas-denuncias': typeof AuthenticatedMinhasDenunciasRoute
   '/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
   '/painel-fiscal': typeof AuthenticatedPainelFiscalRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
+  '/denuncia-anonima': typeof DenunciaAnonimaRoute
   '/_authenticated/minhas-denuncias': typeof AuthenticatedMinhasDenunciasRoute
   '/_authenticated/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
   '/_authenticated/painel-fiscal': typeof AuthenticatedPainelFiscalRoute
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/auth'
+    | '/denuncia-anonima'
     | '/minhas-denuncias'
     | '/nova-denuncia'
     | '/painel-fiscal'
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/denuncia-anonima'
     | '/minhas-denuncias'
     | '/nova-denuncia'
     | '/painel-fiscal'
@@ -103,6 +114,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/denuncia-anonima'
     | '/_authenticated/minhas-denuncias'
     | '/_authenticated/nova-denuncia'
     | '/_authenticated/painel-fiscal'
@@ -113,11 +125,19 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   AuthRoute: typeof AuthRoute
+  DenunciaAnonimaRoute: typeof DenunciaAnonimaRoute
   DenunciaIdRoute: typeof DenunciaIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/denuncia-anonima': {
+      id: '/denuncia-anonima'
+      path: '/denuncia-anonima'
+      fullPath: '/denuncia-anonima'
+      preLoaderRoute: typeof DenunciaAnonimaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -190,6 +210,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   AuthRoute: AuthRoute,
+  DenunciaAnonimaRoute: DenunciaAnonimaRoute,
   DenunciaIdRoute: DenunciaIdRoute,
 }
 export const routeTree = rootRouteImport
