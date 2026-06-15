@@ -17,6 +17,7 @@ import { Route as DenunciaIdRouteImport } from './routes/denuncia.$id'
 import { Route as AuthenticatedPainelFiscalRouteImport } from './routes/_authenticated/painel-fiscal'
 import { Route as AuthenticatedNovaDenunciaRouteImport } from './routes/_authenticated/nova-denuncia'
 import { Route as AuthenticatedMinhasDenunciasRouteImport } from './routes/_authenticated/minhas-denuncias'
+import { Route as AuthenticatedGuardaMorenoRouteImport } from './routes/_authenticated/guarda-moreno'
 import { Route as ApiPublicAnonymousEvidenceRouteImport } from './routes/api/public/anonymous-evidence'
 
 const DenunciaAnonimaRoute = DenunciaAnonimaRouteImport.update({
@@ -61,6 +62,12 @@ const AuthenticatedMinhasDenunciasRoute =
     path: '/minhas-denuncias',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedGuardaMorenoRoute =
+  AuthenticatedGuardaMorenoRouteImport.update({
+    id: '/guarda-moreno',
+    path: '/guarda-moreno',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const ApiPublicAnonymousEvidenceRoute =
   ApiPublicAnonymousEvidenceRouteImport.update({
     id: '/api/public/anonymous-evidence',
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/denuncia-anonima': typeof DenunciaAnonimaRoute
+  '/guarda-moreno': typeof AuthenticatedGuardaMorenoRoute
   '/minhas-denuncias': typeof AuthenticatedMinhasDenunciasRoute
   '/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
   '/painel-fiscal': typeof AuthenticatedPainelFiscalRoute
@@ -82,6 +90,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/denuncia-anonima': typeof DenunciaAnonimaRoute
+  '/guarda-moreno': typeof AuthenticatedGuardaMorenoRoute
   '/minhas-denuncias': typeof AuthenticatedMinhasDenunciasRoute
   '/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
   '/painel-fiscal': typeof AuthenticatedPainelFiscalRoute
@@ -94,6 +103,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/auth': typeof AuthRoute
   '/denuncia-anonima': typeof DenunciaAnonimaRoute
+  '/_authenticated/guarda-moreno': typeof AuthenticatedGuardaMorenoRoute
   '/_authenticated/minhas-denuncias': typeof AuthenticatedMinhasDenunciasRoute
   '/_authenticated/nova-denuncia': typeof AuthenticatedNovaDenunciaRoute
   '/_authenticated/painel-fiscal': typeof AuthenticatedPainelFiscalRoute
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/denuncia-anonima'
+    | '/guarda-moreno'
     | '/minhas-denuncias'
     | '/nova-denuncia'
     | '/painel-fiscal'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/denuncia-anonima'
+    | '/guarda-moreno'
     | '/minhas-denuncias'
     | '/nova-denuncia'
     | '/painel-fiscal'
@@ -127,6 +139,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/denuncia-anonima'
+    | '/_authenticated/guarda-moreno'
     | '/_authenticated/minhas-denuncias'
     | '/_authenticated/nova-denuncia'
     | '/_authenticated/painel-fiscal'
@@ -201,6 +214,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMinhasDenunciasRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/guarda-moreno': {
+      id: '/_authenticated/guarda-moreno'
+      path: '/guarda-moreno'
+      fullPath: '/guarda-moreno'
+      preLoaderRoute: typeof AuthenticatedGuardaMorenoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/api/public/anonymous-evidence': {
       id: '/api/public/anonymous-evidence'
       path: '/api/public/anonymous-evidence'
@@ -212,12 +232,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedGuardaMorenoRoute: typeof AuthenticatedGuardaMorenoRoute
   AuthenticatedMinhasDenunciasRoute: typeof AuthenticatedMinhasDenunciasRoute
   AuthenticatedNovaDenunciaRoute: typeof AuthenticatedNovaDenunciaRoute
   AuthenticatedPainelFiscalRoute: typeof AuthenticatedPainelFiscalRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedGuardaMorenoRoute: AuthenticatedGuardaMorenoRoute,
   AuthenticatedMinhasDenunciasRoute: AuthenticatedMinhasDenunciasRoute,
   AuthenticatedNovaDenunciaRoute: AuthenticatedNovaDenunciaRoute,
   AuthenticatedPainelFiscalRoute: AuthenticatedPainelFiscalRoute,
