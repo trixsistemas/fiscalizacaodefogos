@@ -84,13 +84,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "Plataforma cívica para registrar e fiscalizar denúncias de fogos de artifício com estampido em sua região.",
       },
-      { property: "og:title", content: "Fiscaliza Fogos" },
+      { property: "og:title", content: "Fiscaliza Fogos — Monitoramento cívico de fogos com estampido" },
       {
         property: "og:description",
         content: "Monitoramento cívico de poluição sonora urbana e fogos com estampido.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Fiscaliza Fogos — Monitoramento cívico de fogos com estampido" },
+      { name: "description", content: "Vamos Criar! is a creative project starter that helps users generate project ideas and content." },
+      { property: "og:description", content: "Vamos Criar! is a creative project starter that helps users generate project ideas and content." },
+      { name: "twitter:description", content: "Vamos Criar! is a creative project starter that helps users generate project ideas and content." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/155f2c24-9a67-4ad9-b853-56365312fadc/id-preview-44d6e199--e271ac0a-c5ee-427c-a451-8b97774b5d7c.lovable.app-1781482400363.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/155f2c24-9a67-4ad9-b853-56365312fadc/id-preview-44d6e199--e271ac0a-c5ee-427c-a451-8b97774b5d7c.lovable.app-1781482400363.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
