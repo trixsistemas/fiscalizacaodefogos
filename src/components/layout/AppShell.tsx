@@ -17,6 +17,7 @@ const NAV: NavItem[] = [
   { to: "/minhas-denuncias", label: "Minhas denúncias" },
   { to: "/painel-fiscal", label: "Painel fiscal", requireRole: "fiscal" },
   { to: "/guarda-moreno", label: "Guarda Municipal", requireRole: "fiscal" },
+  { to: "/admin/usuarios", label: "Usuários", requireRole: "admin" },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
