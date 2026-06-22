@@ -66,14 +66,18 @@ function ReportDetail() {
   const updateStatus = useMutation({
     mutationFn: async () => {
       if (!newStatus) return;
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("reports")
         .update({ status: newStatus })
-        .eq("id", id);
+        .eq("id", id)
+        .select("id, status");
       if (error) throw error;
+      if (!data || data.length === 0)
+        throw new Error("Sem permissão para atualizar esta denúncia.");
     },
     onSuccess: () => {
       toast.success("Status atualizado");
+      setNewStatus("");
       qc.invalidateQueries({ queryKey: ["report", id] });
       qc.invalidateQueries({ queryKey: ["reports"] });
     },
@@ -83,14 +87,20 @@ function ReportDetail() {
   const addInspection = useMutation({
     mutationFn: async () => {
       if (!auth.user) throw new Error("Sessão expirada");
-      const { error } = await supabase.from("inspections").insert({
-        report_id: id,
-        fiscal_id: auth.user.id,
-        observacao: obs || null,
-        resultado,
-      });
+      const { data, error } = await supabase
+        .from("inspections")
+        .insert({
+          report_id: id,
+          fiscal_id: auth.user.id,
+          observacao: obs || null,
+          resultado,
+        })
+        .select("id");
       if (error) throw error;
+      if (!data || data.length === 0)
+        throw new Error("Sem permissão para registrar fiscalização.");
     },
+
     onSuccess: () => {
       toast.success("Fiscalização registrada");
       setObs("");
