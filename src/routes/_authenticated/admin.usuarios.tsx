@@ -55,9 +55,11 @@ export const Route = createFileRoute("/_authenticated/admin/usuarios")({
 
 function AdminUsuarios() {
   const qc = useQueryClient();
+  const { user } = useAuth();
   const list = useServerFn(adminListUsers);
   const create = useServerFn(adminCreateUser);
   const updatePassword = useServerFn(adminUpdatePassword);
+  const removeUser = useServerFn(adminDeleteUser);
 
   const { data: users, isLoading } = useQuery({
     queryKey: ["admin-users"],
