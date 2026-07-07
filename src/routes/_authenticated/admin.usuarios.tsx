@@ -284,7 +284,6 @@ function AdminUsuarios() {
           </form>
         </DialogContent>
       </Dialog>
-      </Dialog>
 
       <AlertDialog open={!!deleteTarget} onOpenChange={(o) => !o && setDeleteTarget(null)}>
         <AlertDialogContent>
