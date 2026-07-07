@@ -63,7 +63,7 @@ function ReportDetail() {
         .select("*")
         .eq("report_id", id)
         .order("data_fiscalizacao", { ascending: false });
-      return { report: r, evidences: ev ?? [], inspections: insp ?? [] };
+      return { report: r, evidences: evidencesWithUrls, inspections: insp ?? [] };
     },
   });
 
