@@ -89,3 +89,19 @@ export const adminListUsers = createServerFn({ method: "GET" })
       roles: rolesByUser.get(u.id) ?? [],
     }));
   });
+
+const deleteSchema = z.object({ user_id: z.string().uuid() });
+
+export const adminDeleteUser = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => deleteSchema.parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    if (data.user_id === context.userId) {
+      throw new Error("Você não pode excluir a si mesmo.");
+    }
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.auth.admin.deleteUser(data.user_id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });

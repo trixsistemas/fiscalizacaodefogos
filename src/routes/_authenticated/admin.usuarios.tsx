@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ShieldCheck, UserPlus, KeyRound } from "lucide-react";
+import { ShieldCheck, UserPlus, KeyRound, Trash2 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,12 +16,24 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { supabase } from "@/integrations/supabase/client";
 import {
   adminCreateUser,
+  adminDeleteUser,
   adminListUsers,
   adminUpdatePassword,
 } from "@/lib/admin-users.functions";
+import { useAuth } from "@/hooks/use-auth";
 
 type Role = "admin" | "fiscal" | "cidadao";
 
@@ -43,9 +55,11 @@ export const Route = createFileRoute("/_authenticated/admin/usuarios")({
 
 function AdminUsuarios() {
   const qc = useQueryClient();
+  const { user } = useAuth();
   const list = useServerFn(adminListUsers);
   const create = useServerFn(adminCreateUser);
   const updatePassword = useServerFn(adminUpdatePassword);
+  const removeUser = useServerFn(adminDeleteUser);
 
   const { data: users, isLoading } = useQuery({
     queryKey: ["admin-users"],
@@ -85,6 +99,17 @@ function AdminUsuarios() {
       toast.success("Senha atualizada");
       setPwTarget(null);
       setNewPw("");
+    },
+    onError: (e: Error) => toast.error("Erro", { description: e.message }),
+  });
+
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; email: string; nome: string | null } | null>(null);
+  const deleteMut = useMutation({
+    mutationFn: () => removeUser({ data: { user_id: deleteTarget!.id } }),
+    onSuccess: () => {
+      toast.success("Usuário excluído");
+      setDeleteTarget(null);
+      qc.invalidateQueries({ queryKey: ["admin-users"] });
     },
     onError: (e: Error) => toast.error("Erro", { description: e.message }),
   });
@@ -210,6 +235,16 @@ function AdminUsuarios() {
                   >
                     <KeyRound className="size-3.5" /> Senha
                   </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="gap-1.5 text-destructive hover:text-destructive"
+                    disabled={user?.id === u.id}
+                    title={user?.id === u.id ? "Você não pode excluir a si mesmo" : "Excluir usuário"}
+                    onClick={() => setDeleteTarget({ id: u.id, email: u.email ?? "", nome: u.nome })}
+                  >
+                    <Trash2 className="size-3.5" /> Excluir
+                  </Button>
                 </li>
               ))}
             </ul>
@@ -249,6 +284,31 @@ function AdminUsuarios() {
           </form>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={!!deleteTarget} onOpenChange={(o) => !o && setDeleteTarget(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir usuário?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação é permanente e não pode ser desfeita. O usuário{" "}
+              <strong>{deleteTarget?.nome || deleteTarget?.email}</strong> perderá o acesso ao sistema.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleteMut.isPending}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={deleteMut.isPending}
+              onClick={(e) => {
+                e.preventDefault();
+                deleteMut.mutate();
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleteMut.isPending ? "Excluindo..." : "Excluir"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </AppShell>
   );
 }
