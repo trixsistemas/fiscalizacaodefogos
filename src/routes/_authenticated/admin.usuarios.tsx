@@ -235,6 +235,16 @@ function AdminUsuarios() {
                   >
                     <KeyRound className="size-3.5" /> Senha
                   </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="gap-1.5 text-destructive hover:text-destructive"
+                    disabled={user?.id === u.id}
+                    title={user?.id === u.id ? "Você não pode excluir a si mesmo" : "Excluir usuário"}
+                    onClick={() => setDeleteTarget({ id: u.id, email: u.email ?? "", nome: u.nome })}
+                  >
+                    <Trash2 className="size-3.5" /> Excluir
+                  </Button>
                 </li>
               ))}
             </ul>
