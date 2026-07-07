@@ -50,6 +50,14 @@ function ReportDetail() {
         .from("evidence")
         .select("*")
         .eq("report_id", id);
+      const evidencesWithUrls = await Promise.all(
+        (ev ?? []).map(async (e) => {
+          const { data: signed } = await supabase.storage
+            .from("evidence")
+            .createSignedUrl(e.arquivo_url, 3600);
+          return { ...e, signedUrl: signed?.signedUrl ?? null };
+        }),
+      );
       const { data: insp } = await supabase
         .from("inspections")
         .select("*")
