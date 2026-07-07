@@ -50,12 +50,20 @@ function ReportDetail() {
         .from("evidence")
         .select("*")
         .eq("report_id", id);
+      const evidencesWithUrls = await Promise.all(
+        (ev ?? []).map(async (e) => {
+          const { data: signed } = await supabase.storage
+            .from("evidence")
+            .createSignedUrl(e.arquivo_url, 3600);
+          return { ...e, signedUrl: signed?.signedUrl ?? null };
+        }),
+      );
       const { data: insp } = await supabase
         .from("inspections")
         .select("*")
         .eq("report_id", id)
         .order("data_fiscalizacao", { ascending: false });
-      return { report: r, evidences: ev ?? [], inspections: insp ?? [] };
+      return { report: r, evidences: evidencesWithUrls, inspections: insp ?? [] };
     },
   });
 
@@ -189,19 +197,22 @@ function ReportDetail() {
             ) : (
               <ul className="space-y-2">
                 {evidences.map((e) => {
-                  const { data: pub } = supabase.storage
-                    .from("evidence")
-                    .getPublicUrl(e.arquivo_url);
                   return (
                     <li key={e.id} className="text-xs">
-                      <a
-                        href={pub.publicUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-brand hover:underline uppercase tracking-wider font-semibold"
-                      >
-                        {e.tipo} → abrir
-                      </a>
+                      {e.signedUrl ? (
+                        <a
+                          href={e.signedUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-brand hover:underline uppercase tracking-wider font-semibold"
+                        >
+                          {e.tipo} → abrir
+                        </a>
+                      ) : (
+                        <span className="text-muted-foreground uppercase tracking-wider">
+                          {e.tipo} (indisponível)
+                        </span>
+                      )}
                     </li>
                   );
                 })}
