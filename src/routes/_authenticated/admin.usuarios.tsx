@@ -103,6 +103,17 @@ function AdminUsuarios() {
     onError: (e: Error) => toast.error("Erro", { description: e.message }),
   });
 
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; email: string; nome: string | null } | null>(null);
+  const deleteMut = useMutation({
+    mutationFn: () => removeUser({ data: { user_id: deleteTarget!.id } }),
+    onSuccess: () => {
+      toast.success("Usuário excluído");
+      setDeleteTarget(null);
+      qc.invalidateQueries({ queryKey: ["admin-users"] });
+    },
+    onError: (e: Error) => toast.error("Erro", { description: e.message }),
+  });
+
   return (
     <AppShell>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-10 space-y-8">
