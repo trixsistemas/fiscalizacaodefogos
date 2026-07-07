@@ -26,14 +26,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import {
   adminCreateUser,
+  adminDeleteUser,
   adminListUsers,
   adminUpdatePassword,
 } from "@/lib/admin-users.functions";
