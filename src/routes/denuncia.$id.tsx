@@ -197,19 +197,22 @@ function ReportDetail() {
             ) : (
               <ul className="space-y-2">
                 {evidences.map((e) => {
-                  const { data: pub } = supabase.storage
-                    .from("evidence")
-                    .getPublicUrl(e.arquivo_url);
                   return (
                     <li key={e.id} className="text-xs">
-                      <a
-                        href={pub.publicUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-brand hover:underline uppercase tracking-wider font-semibold"
-                      >
-                        {e.tipo} → abrir
-                      </a>
+                      {e.signedUrl ? (
+                        <a
+                          href={e.signedUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-brand hover:underline uppercase tracking-wider font-semibold"
+                        >
+                          {e.tipo} → abrir
+                        </a>
+                      ) : (
+                        <span className="text-muted-foreground uppercase tracking-wider">
+                          {e.tipo} (indisponível)
+                        </span>
+                      )}
                     </li>
                   );
                 })}
