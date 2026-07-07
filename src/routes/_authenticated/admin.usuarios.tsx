@@ -28,11 +28,13 @@ import {
 } from "@/components/ui/alert-dialog";
 import { supabase } from "@/integrations/supabase/client";
 import {
+import {
   adminCreateUser,
   adminDeleteUser,
   adminListUsers,
   adminUpdatePassword,
 } from "@/lib/admin-users.functions";
+import { useAuth } from "@/hooks/use-auth";
 
 type Role = "admin" | "fiscal" | "cidadao";
 
